@@ -1,0 +1,9 @@
+name: HelloWorldPlugin
+main: com.jonah.spigothelloworld.HelloWorldPlugin
+version: 1.0
+api-version: 1.21
+description: A simple plugin that logs Hello World on startup.
+commands:
+  tendies:
+    description: Makes it rain cooked chicken!
+    usage: /tendies
