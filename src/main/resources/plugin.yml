@@ -8,5 +8,5 @@ commands:
     description: Makes it rain cooked chicken!
     usage: /tendies
   equip:
-    description: Equips a Magic Missile wand.
-    usage: /equip wand
+    description: Equips special items.
+    usage: /equip < wand | archersbane >
