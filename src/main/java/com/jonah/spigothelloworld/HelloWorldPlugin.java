@@ -7,18 +7,25 @@ import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
 
-public class HelloWorldPlugin extends JavaPlugin {
+public class HelloWorldPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
         getLogger().info("Hello, World! Plugin has been enabled.");
+        // Register the plugin as an event listener
+        Bukkit.getPluginManager().registerEvents(this, this);
     }
 
     @Override
@@ -72,6 +79,53 @@ public class HelloWorldPlugin extends JavaPlugin {
             }
         }
 
+        if (command.getName().equalsIgnoreCase("equip") && args.length > 0 && args[0].equalsIgnoreCase("wand")) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                giveMagicMissile(player);
+                player.sendMessage("You've been equipped with the Magic Missile!");
+                return true;
+            }
+        }
+
         return false;
+    }
+
+    // Method to give the player the Magic Missile (Blaze Rod)
+    private void giveMagicMissile(Player player) {
+        // Create the blaze rod item
+        ItemStack magicMissile = new ItemStack(Material.BLAZE_ROD);
+        ItemMeta meta = magicMissile.getItemMeta();
+
+        // Set custom display name
+        meta.setDisplayName("Magic Missile");
+
+        // Optionally, add lore or other metadata to the item
+        magicMissile.setItemMeta(meta);
+
+        // Drop the item above the player
+        Location location = player.getLocation().add(0, 1, 0);
+        player.getWorld().dropItem(location, magicMissile);
+    }
+
+    // Event handling for when the player uses the Magic Missile
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        ItemStack item = player.getInventory().getItemInMainHand();
+
+        // Check if the player is holding the Magic Missile (Blaze Rod)
+        if (item != null && item.getType() == Material.BLAZE_ROD && item.getItemMeta() != null && "Magic Missile".equals(item.getItemMeta().getDisplayName())) {
+
+            // Spawn a fireball in front of the player
+            World world = player.getWorld();
+            Location eyeLocation = player.getEyeLocation();
+            Vector direction = eyeLocation.getDirection().normalize();
+
+            Fireball fireball = world.spawn(eyeLocation.add(direction.multiply(1.5)), Fireball.class);
+            fireball.setDirection(direction);
+            fireball.setIsIncendiary(true);  // Make sure the fireball can set blocks on fire
+            fireball.setYield(4.0f);  // Explosion size (higher values create larger explosions)
+        }
     }
 }

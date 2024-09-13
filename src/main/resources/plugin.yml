@@ -7,3 +7,6 @@ commands:
   tendies:
     description: Makes it rain cooked chicken!
     usage: /tendies
+  equip:
+    description: Equips a Magic Missile wand.
+    usage: /equip wand
