@@ -9,4 +9,4 @@ commands:
     usage: /tendies
   equip:
     description: Equips special items.
-    usage: /equip < wand | archersbane >
+    usage: /equip < wand | archersbane | frostbourne >
