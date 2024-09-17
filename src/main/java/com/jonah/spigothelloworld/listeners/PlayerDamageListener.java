@@ -1,5 +1,6 @@
 package com.jonah.spigothelloworld.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,11 +23,19 @@ public class PlayerDamageListener implements Listener {
                 // Halve projectile damage
                 if (event.getCause() == EntityDamageByEntityEvent.DamageCause.PROJECTILE) {
                     event.setDamage(event.getDamage() / 2);
+                    // Log to server console
+                    Bukkit.getLogger().info("Archer's Bane effect triggered: Projectile damage halved for player " + player.getName());
+                    // Send a message to the player
+                    player.sendMessage("Archer's Bane activated! Projectile damage halved.");
                 }
 
                 // Double melee damage
                 else if (event.getDamager() instanceof Player || event.getDamager() instanceof org.bukkit.entity.Monster) {
                     event.setDamage(event.getDamage() * 2);
+                    // Log to server console
+                    Bukkit.getLogger().info("Archer's Bane effect triggered: Melee damage doubled for player " + player.getName());
+                    // Send a message to the player
+                    player.sendMessage("Archer's Bane activated! Melee damage doubled.");
                 }
             }
         }
